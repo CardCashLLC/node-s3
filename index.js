@@ -63,7 +63,7 @@ module.exports = function (options) {
 
   auth = options.auth ? options.auth.split(':') : [options.key, options.secret];
   sign = signer(auth[0], auth[1]);
-  prefix = 'http://' + that.bucket + '.s3.amazonaws.com' + that.pathname;
+  prefix = 'https://' + that.bucket + '.s3.amazonaws.com' + that.pathname;
 
   ['put', 'post', 'get', 'del', 'head'].forEach(function (method) {
     var verb = method.replace('del', 'delete').toUpperCase();
