@@ -1,6 +1,6 @@
 'use strict';
 
-var curly = require('curly');
+var req = require('request');
 var crypto = require('crypto');
 var parseURL = require('url').parse;
 
@@ -63,7 +63,7 @@ module.exports = function (options) {
 
   auth = options.auth ? options.auth.split(':') : [options.key, options.secret];
   sign = signer(auth[0], auth[1]);
-  prefix = that.bucket + '.s3.amazonaws.com' + that.pathname;
+  prefix = 'http://' + that.bucket + '.s3.amazonaws.com' + that.pathname;
 
   ['put', 'post', 'get', 'del', 'head'].forEach(function (method) {
     var verb = method.replace('del', 'delete').toUpperCase();
@@ -79,8 +79,9 @@ module.exports = function (options) {
       options = options || {};
       options.pool = false;
       options.headers = sign(verb, signing, options.headers);
+      options.url = prefix + pathname;
 
-      return curly[method](prefix + pathname, options, callback);
+      return req[method](options, callback);
     };
   });
 
